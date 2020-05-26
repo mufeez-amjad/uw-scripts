@@ -5,7 +5,6 @@ failed_out=()
 failed_sample=()
 failed_diff=()
 tests_res=()
-questions=()
 
 i=1
 for j in 0 1 2
@@ -30,7 +29,7 @@ do
 
 	tests=$(find . -regex "$regex")
 
-	q_dir=../a$i/q$j
+	q_dir=a$i/q$j
 	if test -n "$(find $q_dir -regex '.*.cc')"
 	then
 		cc_files=$(ls -A $q_dir/*.cc)
@@ -78,3 +77,4 @@ printf '\n'
 passed=$(expr ${#tests_res[@]} - ${#failed_names[@]})
 
 echo $passed/${#tests_res[@]} tests passed!
+
