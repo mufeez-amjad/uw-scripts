@@ -6,8 +6,8 @@ failed_sample=()
 failed_diff=()
 tests_res=()
 
-i=1
-for j in 0 1 2
+i=1 # assignment number
+for j in 0 1 2 # questions - q0,etc.
 do
 	if [ -n "$1" ]
 	then
@@ -33,7 +33,7 @@ do
 	if test -n "$(find $q_dir -regex '.*.cc')"
 	then
 		cc_files=$(ls -A $q_dir/*.cc)
-		g++ -o $q_dir/prog -w $cc_files
+		g++ -o $q_dir/prog -w $cc_files # note: warnings omitted
 	fi
 
 	for test in $tests
