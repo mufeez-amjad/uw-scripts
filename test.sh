@@ -28,6 +28,7 @@ do
 	fi
 
 	tests=$(find . -regex "$regex")
+	echo "$tests"
 
 	q_dir=a$i/q$j
 	if test -n "$(find $q_dir -regex '.*.cc')"
@@ -36,6 +37,7 @@ do
 		g++ -o $q_dir/prog -w $cc_files # note: warnings omitted
 	fi
 
+
 	for test in $tests
 	do 
 		file1=$q_dir/prog
@@ -43,32 +45,48 @@ do
 		out1=$($file1 < $test)
 		out2=$($file2 < $test)
 		diff=$(diff <($file1 < $test) <($file2 < $test))
-		if [ "$diff" != "" ]
+		valgrind=$(valgrind --leak-check=full --error-exitcode=1 $file1 < $test 2>&1) 
+		is_mem_leak=$?
+		if [ "$diff" != "" ] || [ $is_mem_leak == 1 ]
 		then
 			failed_names+=($test)
-			failed_out+=("$out1")
-			failed_sample+=("$out2")
-			failed_diff+=("$diff")
-			tests_res+=('F')
+			if [ "$diff" != "" ]
+			then
+				failed_out+=("$out1")
+				failed_sample+=("$out2")
+				failed_diff+=("$diff")
+				tests_res+=('F')
+			else
+				failed_out+=("$valgrind")
+				failed_sample+=("")
+				failed_diff+=("")
+				tests_res+=('M')
+			fi
 		else
 			tests_res+=('.')
 		fi
 	done
 done
 
-
+printf '\n'
 for i in "${!failed_names[@]}"
 do
 	echo "${failed_names[$i]}"
 	printf '%*s\n' "${COLUMNS:-$(tput cols)}" '' | tr ' ' -
 	echo "${failed_out[$i]}"
 	printf '\n'
-	echo Sample:
-	echo "${failed_sample[$i]}"
-	printf '\n'
-	echo Diff:
-	echo "${failed_diff[$i]}"
-	printf '\n'
+	if [ "${failed_sample[$i]}" != "" ]
+	then
+		echo Sample:
+		echo "${failed_sample[$i]}"
+		printf '\n'
+	fi
+	if [ "${failed_diff[$i]}" != "" ]
+	then
+		echo Diff:
+		echo "${failed_diff[$i]}"
+		printf '\n'
+	fi
 done
 
 printf %s "${tests_res[@]}"
