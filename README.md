@@ -3,7 +3,7 @@ A collection of QOL scripts that I use at UW.
 
 1. [test.sh](#testsh)
 
-## test.sh
+## [test.sh](/test.sh)
 
 Essentially a test suite. This script runs all your tests against a sample executable (which returns the expected output) and your own compiled code, and returns the diff. It also checks for memory leaks using `valgrind`. 
 
@@ -20,7 +20,7 @@ a1/
 test.sh
 ```
 
-Tests must be end in `.in` and must be located under the correct question directory ex. `a1/q1/`.
+Tests must end in `.in` and must be located under the correct question directory ex. `a1/q1/`.
 
 It outputs the diff (if any) or valgrind output (if errors exist) as well as indicator of the tests run:
 - `F` indicates diff doesn't match
