@@ -1,4 +1,4 @@
-# CS 247 Test Script
+# [CS 247 Test Script](test.sh)
 
 This script should be placed in your root directory:
 ```
