@@ -26,4 +26,4 @@ It outputs the diff (if any) or memory errors (if any) as well as indicator of t
 
 **Note**: You can optionally pass in the specific question `./test.sh 1` to only run tests for that question. You can also specify the test to run for a specific question `./test.sh 1 test.in`, which will only run test.in against a1q1.
 
-**Additional Note:** You can make the script test a2/, a3/, etc. by modifying the variable `i` in `test.sh`. 
+**Additional Note:** You can make the script test a2/, a3/ by modifying the variable `i` in `test.sh`. 
