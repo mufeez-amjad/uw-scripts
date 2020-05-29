@@ -43,24 +43,39 @@ do
 		file1=$q_dir/prog
 		file2=$q_dir/a"$i"q"$j"
 		out1=$($file1 < $test)
+		out1_return=$? #139 if seg fault
 		out2=$($file2 < $test)
+		out2_return=$?
 		diff=$(diff <($file1 < $test) <($file2 < $test))
 		valgrind=$(valgrind --leak-check=full --error-exitcode=1 $file1 < $test 2>&1) 
 		is_mem_leak=$?
-		if [ "$diff" != "" ] || [ $is_mem_leak == 1 ]
+		if [ "$diff" != "" ] || [ $is_mem_leak == 1 ] || [ $out1_return == 139 ]
 		then
 			failed_names+=($test)
-			if [ "$diff" != "" ]
+			if [ $out1_return == 139 ]
 			then
-				failed_out+=("$out1")
-				failed_sample+=("$out2")
-				failed_diff+=("$diff")
-				tests_res+=('F')
-			else
-				failed_out+=("$valgrind")
-				failed_sample+=("")
+				failed_out+=("segmentation fault")
+				if [ $out2_return == 139 ]
+				then
+					failed_sample+=("segmentation fault")
+				else
+					failed_sample+=("")
+				fi
 				failed_diff+=("")
-				tests_res+=('M')
+				tests_res+=('S')
+			else
+				if [ "$diff" != "" ]
+				then
+					failed_out+=("$out1")
+					failed_sample+=("$out2")
+					failed_diff+=("$diff")
+					tests_res+=('F')
+				else
+					failed_out+=("$valgrind")
+					failed_sample+=("")
+					failed_diff+=("")
+					tests_res+=('M')
+				fi
 			fi
 		else
 			tests_res+=('.')
