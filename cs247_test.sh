@@ -17,7 +17,7 @@ do
 		fi
 	fi
 
-	regex=".*a$i\/q$j.*.in"
+	regex=".*a$i\/q$j.*\.in"
 
 	if [ -n "$2" ]
 	then
