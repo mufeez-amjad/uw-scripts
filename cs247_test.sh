@@ -34,7 +34,7 @@ do
 	if test -n "$(find $q_dir -regex '.*.cc')"
 	then
 		cc_files=$(ls -A $q_dir/*.cc)
-		g++ -o $q_dir/prog -w $cc_files # note: warnings omitted
+		g++ -o $q_dir/prog -w $cc_files -O0 -g # note: warnings omitted
 	fi
 
 
