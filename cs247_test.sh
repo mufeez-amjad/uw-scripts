@@ -6,7 +6,7 @@ failed_sample=()
 failed_diff=()
 tests_res=()
 
-i=1 # assignment number
+i=2 # assignment number
 for j in 0 1 2 # questions - q0,etc.
 do
 	if [ -n "$1" ]
@@ -31,15 +31,18 @@ do
 	echo "$tests"
 
 	q_dir=a$i/q$j
-	if test -n "$(find $q_dir -regex '.*.cc')"
-	then
+	if test -n "$(find $q_dir -regex '.*Makefile')"; then
+		(cd $q_dir/ && make clean && make)
+
+	elif test -n "$(find $q_dir -regex '.*.cc')"; then
 		cc_files=$(ls -A $q_dir/*.cc)
 		g++ -o $q_dir/prog -w $cc_files -O0 -g # note: warnings omitted
+	else
+		echo "WARNING no compilation ran"
 	fi
 
-
 	for test in $tests
-	do 
+	do
 		file1=$q_dir/prog
 		file2=$q_dir/a"$i"q"$j"
 		out1=$($file1 < $test)
@@ -47,7 +50,7 @@ do
 		out2=$($file2 < $test)
 		out2_return=$?
 		diff=$(diff <($file1 < $test) <($file2 < $test))
-		valgrind=$(valgrind --leak-check=full --error-exitcode=1 $file1 < $test 2>&1) 
+		valgrind=$(valgrind --leak-check=full --error-exitcode=1 $file1 < $test 2>&1)
 		is_mem_leak=$?
 		if [ "$diff" != "" ] || [ $is_mem_leak == 1 ] || [ $out1_return == 139 ]
 		then
@@ -110,4 +113,3 @@ printf '\n'
 passed=$(expr ${#tests_res[@]} - ${#failed_names[@]})
 
 echo $passed/${#tests_res[@]} tests passed!
-
