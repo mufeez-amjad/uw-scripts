@@ -25,4 +25,4 @@ It outputs the diff (if any) or memory errors (if any) as well as indicator of t
 - `S` indicates a segfault
 - `.` indicates a pass
 
-**Note**: You can optionally pass in the specific question `./test.sh 1` to only run tests for that question. You can also specify the test to run for a specific question `./test.sh 1 test.in`, which will only run test.in against q1.
+**Note**: You can optionally pass in the specific question `./cs247_test.sh 1` to only run tests for that question. You can also specify the test to run for a specific question `./cs247_test.sh 1 test.in`, which will only run test.in against q1.
