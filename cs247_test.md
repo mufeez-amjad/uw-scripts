@@ -14,7 +14,7 @@ cs247_test.sh
 ```
 
 - The script will look into a`i`/* and test questions `j`
-  1. It will either use your makefile (if one exists) or compile your `.cc` and `.h` files with g++ and link it to a executable called `prog`
+  1. It will either use your makefile (if one exists) or compile your `.cc` and `.h` files with g++ and link it to an executable called `prog`
   2. It will run `prog` against `aiqj` and show you a diff, along with a memory leak summary using `valgrind`
   3. If the test fails, you can inspect the output in the temp files created with your test name.
 - Place your tests ending in `.in` anywhere inside the question folder (you can have a subdirectory for tests)
