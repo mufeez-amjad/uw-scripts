@@ -20,7 +20,7 @@ function run_test() {
 		diff=$(diff $tmpfile $tmpfile2)
     different=$?
     valgrind=$(valgrind --leak-check=full --track-origins=yes --error-exitcode=1 $exec < $test 2>&1)
-    is_mem_leak=$?
+    is_mem_leak=$? #$?
     if [ $different != 0 ] || [ $is_mem_leak == 1 ] || [ $out1_return == 139 ]
 		then
 			failed_names+=($test)
@@ -34,6 +34,7 @@ function run_test() {
 					failed_sample+=("")
 				fi
 				failed_diff+=("")
+				printf 'S'
 				tests_res+=('S')
 			else
 				if [ "$diff" != "" ]
@@ -44,19 +45,21 @@ function run_test() {
 					failed_sample+=("$out2")
 					failed_diff+=("$diff")
 					tests_res+=('F')
+					printf 'F'
 				else
 					failed_out+=("$valgrind")
 					failed_sample+=("")
 					failed_diff+=("")
 					tests_res+=('M')
+					printf 'M'
 				fi
 			fi
 		else
 			tests_res+=('.')
+			printf '.'
 			rm "$tmpfile"
 			rm "$tmpfile2"
 		fi
-    
 }
 
 i=2 # assignment number
@@ -102,7 +105,7 @@ do
 	done
 done
 
-printf '\n'
+printf '\n\n'
 for i in "${!failed_names[@]}"
 do
 	echo "${failed_names[$i]}"
